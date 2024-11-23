@@ -1,0 +1,43 @@
+Analyzing a dynamic step by step
+
+1. Centralizando a proteína/complexo na caixa
+gmx trjconv -s step5.1.tpr -f step5.1.xtc -o step5.1_noPBC.xtc -pbc mol -center
+(Select 1 ("Protein") as the group to be centered and 0 ("System") for output.)
+
+1.1 RMSD calculation
+gmx rms -s step5.1.tpr -f step5.1_noPBC.xtc -o rmsd.xvg -tu ns
+(Choose 4 ("Backbone") for both the least-squares fit and the group for RMSD calculation)
+
+1.1.1 Chains and ligand
+gmx make_ndx -f step5.1.gro -o residuesA.ndx (choose the residue)
+r 1-100 (exemple)
+q to salve
+
+gmx rms -s step5.1.tpr -f step5.1.xtc -n residuesA.ndx -o rsmd.xvg
+choose 1 for both
+
+1.1.2 RMSD compared to the crystallographic structure calculation
+gmx rms -s em.tpr -f step5.1_noPBC.xtc -o rmsd_xtal.xvg -tu ns
+
+1.2 RSMF calculations
+gmx rmsf -f step5.1.xtc -s step5.1.tpr -o rmsf.xvg
+( At the prompt, select the group C-alpha.) 
+
+1.2.1 Chains and ligand
+gmx rmsf -s step5.1.tpr -f step5.1.xtc -n residuesA.ndx -o rsmfA.xvg
+
+1.3 Radius Gyration
+gmx gyrate -s step5.1.tpr -f step5.1_noPBC.xtc -o gyrate.xvg
+(Choose group 1 (Protein) for analysis.)
+
+1.3 HBond numbers calculation
+gmx hbond -f step5.1.xtc -s step5.1.tpr -n index.ndx -num hbnum.xvg
+(Gerar gráfico: xmgrace hbnum.xvg)
+
+1.3.1 Index file containing the atoms involved in hydrogen bond interactions.
+gmx hbond -f step5.1.xtc -s step5.1.tpr -n index.ndx -hbn h_bond.ndx
+Visualizar no editor de texto: gmx make_ndx -f step5.1.gro -n hbond.ndx
+
+1.4 Solvent Accessible Surface Area (SASA)
+gmx sasa -f step5.1.xtc -s step5.1.tpr -o sasa.xvg (-tu ns)
+(select Group 1 "Protein")

@@ -1,0 +1,12 @@
+MMPBSA calaculation
+
+1. Get gmx_MMPBSA from https://valdes-tresanco-ms.github.io/gmx_MMPBSA/dev/
+
+2. Install gmx_MMPBSA
+
+3.Open gmx_MMPBSA (tereminal)
+Active MMPBSA
+conda activate MMPBSA
+
+4. Run gmx_MMPBSA (Command-line)
+gmx_MMPBSA -O -i mmpbsa.in -cs step5.1.tpr -ci index.ndx -cg 1 13 -ct step5.1_noPBC.xtc -cp topol1.top -o FINAL_RESULTS_MMPBSA.dat -eo FINAL_RESULTS_MMPBSA.cs

@@ -1,0 +1,35 @@
+GROMACS step by step tutorial
+
+1. step4_Minimization (terminal)
+1.1 gmx grompp -f step4.0_minimization.mdp -o step4.0_minimization.tpr -c step3_input.gro -r step3_input.gro -p topol.top -maxwarn 1 
+
+1.2. gmx mdrun -nb gpu -v -deffnm step4.0_minimization
+
+2. step4_1 Equilibration (terminal)
+2.1 Check the CHARMM-GUI input and fix it
+
+2.2. gmx grompp -f step4.1_equilibration.mdp -o step4.1_equilibration.tpr -c step4.0_minimization.gro -r step3_input.gro -p topol.top 
+
+2.3. gmx mdrun -nb gpu -v -deffnm step4.1_equilibration
+
+3. step5_prodution (terminal)
+3.1. Check the CHARMM-GUI input and fix it
+
+3.2. gmx grompp -f step5_production.mdp -o step5.1.tpr -c step4.1_equilibration.gro -p topol.top 
+
+3.3. gmx mdrun -nb gpu -v -deffnm step5.1
+
+4. Resuming an interrupted dynamic
+4.1 gmx mdrun -nb gpu -s step5.1.tpr -cpi step5.1.cpt -deffnm step5.1
+
+5. Extending a simulation
+5.1 Generating a new .tpr file
+gmx convert-tpr -s step5.1.tpr -extend 50000 -o step5.1_2.tpr
+
+5.2 Run the dynamics from the new .tpr file
+gmx mdrun -nb gpu -s step5.1_2.tpr -cpi step5.1.cpt -noappend 
+
+5.3 Bringing the two dynamics together
+gmx trjcat -f step5.1.xtc traj_comp.part0002.xtc -o final.xtc
+
+
